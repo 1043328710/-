@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<style>
+.container {
+    margin: 0 auto;
+    display: flex;
+    width: 500px;
+    height: 600px;
+    //background: red;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box {
+    width: 450px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+input {
+    width: 270px;
+    height: 40px;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    margin: 0 20px;
+}
+
+.name {
+    font-size: 18px;
+    font-family: "MicrosoftYaHei";
+}
+
+.button {
+    width: 70px;
+    height: 40px;
+    background-color: #5CACEE;
+    color: #fff;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.hint {
+    display: inline-block;
+    margin-left: -100px;
+    margin-top: -10px;
+    color: #999;
+}
+</style>
+
+<body>
+    <div class="container">
+        <div class="box"> 
+            <span class="name">名 称</span>
+            <input type="text" id="text1" />
+            <div class="button" id="btn1">验 证</div>
+        </div>
+        <span class="hint" id="hint1">必填：长度为4~16个字符</span>
+        <div class="box">
+            <span class="name">名 称</span>
+            <input type="text" id="text2" />
+            <div class="button" id="btn2">验 证</div>
+        </div>
+        <span class="hint" id="hint2">必填：长度为4~16个字符</span>
+        <div class="box">
+            <span class="name">名 称</span>
+            <input type="text" id="text3" />
+            <div class="button" id="btn3">验 证</div>
+        </div>
+        <span class="hint" id="hint3">必填：长度为4~16个字符</span>
+    </div>
+    <script>
+    var text1 = document.getElementById("text1");
+    var text2 = document.getElementById("text2");
+    var text3 = document.getElementById("text3");
+    var btn1 = document.getElementById("btn1");
+    var btn2 = document.getElementById("btn2");
+    var btn3 = document.getElementById("btn3");
+    var hint1 = document.getElementById("hint1");
+    var hint2 = document.getElementById("hint2");
+    var hint3 = document.getElementById("hint3");
+
+    function check(text, hint) {
+    	var reg=new RegExp(/[^\x00-\xff]/);
+    	var length=0;
+    	for(var i=0;i<text.value.length;i++){
+    		console.log(i,text.value[i],reg.exec(text.value[i]),reg.exec(text.value[i])!=null);
+    		if(reg.exec(text.value[i])!=null){
+    			length+=2;
+    		}else length++;
+    }
+    	console.log(length);
+        if (length <= 16 && length >= 4) {
+            hint.innerText = "名称格式正确";
+            hint.style.color = "#00FF7F";
+            text.style.borderColor = "#00FF7F";
+        } else {
+            if (length == 0) {
+                hint.innerText = "姓名不能为空";
+            } else hint.innerText = "名称格式不正确";
+
+            hint.style.color = "#FF0000";
+            text.style.borderColor = "#FF0000";
+        }
+    }
+    btn1.onclick = function() {
+        btn1.style.background = "#1C86EE";
+        setTimeout("btn1.style.background='#5CACEE'", 100);
+        check(text1, hint1)
+    }
+    btn2.onclick = function() {
+        btn2.style.background = "#1C86EE";
+        setTimeout("btn2.style.background='#5CACEE'", 100);
+        check(text2, hint2)
+    }
+    btn3.onclick = function() {
+        btn3.style.background = "#1C86EE";
+        setTimeout("btn3.style.background='#5CACEE'", 100);
+        check(text3, hint3)
+    }
+    </script>
+</body>
+
+</html>
