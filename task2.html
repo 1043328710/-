@@ -48,6 +48,7 @@ input {
     text-align: center;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 20px;
 }
 
 .hint {
@@ -61,76 +62,198 @@ input {
 
 <body>
     <div class="container">
-        <div class="box"> 
-            <span class="name">名 称</span>
-            <input type="text" id="text1" onfocus="foc(hint1)"  onblur="onb(text1,hint1)"/>
+        <div class="box">
+            <span class="name">名  称</span>
+            <input type="text" id="text1" onfocus="foc(hint1)" onblur="onb(text1,hint1)" />
         </div>
         <span class="hint" id="hint1"></span>
         <div class="box">
-            <span class="name">名 称</span>
-            <input type="text" id="text2" onfocus="foc(hint2)"  onblur="onb(text2,hint2)"/>
+            <span class="name">密 码</span>
+            <input type="password" id="text2" onfocus="foc(hint2)" onblur="onb(text2,hint2)" />
         </div>
         <span class="hint" id="hint2"></span>
         <div class="box">
-            <span class="name">名 称</span>
-            <input type="text" id="text3" onfocus="foc(hint3)"  onblur="onb(text3,hint3)"/>
+            <span class="name" style="margin-left:-32.5px">密码确认</span>
+            <input type="password" id="text3" onfocus="foc3(hint3)" onblur="onb3()" />
         </div>
         <span class="hint" id="hint3"></span>
-          <div class="button" id="btn">提 交</div>
+        <div class="box">
+            <span class="name">邮 箱</span>
+            <input type="text" id="text4" onfocus="foc4(hint4)" onblur="onb4()" />
+        </div>
+        <span class="hint" id="hint4"></span>
+        <div class="box">
+            <span class="name">手 机</span>
+            <input type="text" id="text5" onfocus="foc5(hint5)" onblur="onb5()" />
+        </div>
+        <span class="hint" id="hint5"></span>
+        <div class="button" id="btn">提 交</div>
     </div>
     <script>
     var text1 = document.getElementById("text1");
     var text2 = document.getElementById("text2");
     var text3 = document.getElementById("text3");
+    var text4 = document.getElementById("text4");
+    var text5 = document.getElementById("text5")
     var btn = document.getElementById("btn");
     var hint1 = document.getElementById("hint1");
     var hint2 = document.getElementById("hint2");
     var hint3 = document.getElementById("hint3");
-    var flag;
-    function foc(hint){
-        hint.innerText="必填：长度为4~16个字符";
-    }
-  function onb(text,hint){
-    check(text,hint);
-  }
+    var hint4 = document.getElementById("hint4");
+    var hint5 = document.getElementById("hint5");
+    var flag; //表单正确数
+    var pass; //首个密码是否正确
 
-
-    function check(text, hint,flag) {
-    	var reg=new RegExp(/[^\x00-\xff]/);
-    	var length=0;
-    	for(var i=0;i<text.value.length;i++){
-    		console.log(i,text.value[i],reg.exec(text.value[i]),reg.exec(text.value[i])!=null);
-    		if(reg.exec(text.value[i])!=null){
-    			length+=2;
-    		}else length++;
+    function foc(hint) {
+        hint.innerText = "必填：长度为4~16个字符";
     }
-    	console.log(length);
+
+    function onb(text, hint) {
+        checkName(text, hint);
+    }
+
+    function foc3(hint) {
+        hint.innerText = "再次输入相同密码";
+    }
+
+    function onb3() {
+        checkRePass();
+    }
+
+    function foc4(hint) {
+        hint.innerText = "请输入正确邮箱格式";
+    }
+
+    function onb4() {
+        checkEmail();
+    }
+
+    function foc5(hint) {
+        hint.innerText = "请输入正确手机格式";
+    }
+
+    function onb5() {
+        checkPhone();
+    }
+
+    function red(text, hint) { //错误显示
+        hint.style.color = "#FF0000";
+        text.style.borderColor = "#FF0000";
+    }
+
+    function green(text, hint) { //正确显示
+        hint.style.color = "#00FF7F";
+        text.style.borderColor = "#00FF7F";
+    }
+
+    function checkName(text, hint, flag) { //判断名称 密码
+        var reg = new RegExp(/[^\x00-\xff]/);
+        var length = 0;
+        for (var i = 0; i < text.value.length; i++) {
+            console.log(i, text.value[i], reg.exec(text.value[i]), reg.exec(text.value[i]) != null);
+            if (reg.exec(text.value[i]) != null) {
+                length += 2;
+            } else length++;
+        }
+        console.log(length);
         if (length <= 16 && length >= 4) {
+            pass = true;
             flag++;
             hint.innerText = "名称格式正确";
-            hint.style.color = "#00FF7F";
-            text.style.borderColor = "#00FF7F";
-        } else {   
-            if (length == 0) {
-                hint.innerText = "姓名不能为空";
-            } else hint.innerText = "名称格式不正确";
+            green(text, hint);
+        } else {
 
-            hint.style.color = "#FF0000";
-            text.style.borderColor = "#FF0000";
+            if (length == 0) {
+
+                hint.innerText = "输入不能为空";
+            } else hint.innerText = "名称格式不正确";
+            pass = false;
+            red(text, hint);
+        }
+        return flag;
+    }
+
+    function checkRePass(flag) { //判断确认密码
+        var val1 = text2.value;
+        var val2 = text3.value;
+        if (pass) {
+            if (val2.length > 0) {
+                if (val1 == val2) {
+                    flag++;
+                    hint3.innerText = "密码输入一致";
+                    green(text3, hint3);
+                } else {
+                    hint3.innerText = "密码输入不一致";
+                    red(text3, hint3);
+                }
+            } else {
+                hint3.innerText = "密码不能为空";
+                red(text3, hint3);
+            }
+        } else {
+            hint3.innerText = "上面密码输入有误";
+            red(text3, hint3);
+        }
+        console.log(val1 == val2, hint3.innerHTML);
+        return flag;
+    }
+
+    function checkEmail(flag) { //判断邮箱
+        var email = text4.value;
+        var reg = new RegExp(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/);
+        if (email.length > 0) {
+            if (reg.exec(email) != null) {
+                flag++;
+                hint4.innerText = "邮箱格式正确";
+                green(text4, hint4);
+            } else {
+                hint4.innerText = "邮箱格式错误";
+                red(text4, hint4);
+            }
+        } else {
+            hint4.innerText = "邮箱不能为空";
+            red(text4, hint4);
+        }
+        return flag;
+    }
+
+    function checkPhone(flag) { //判断手机
+        var phone = text5.value;
+        var reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
+        if (phone.length > 0) {
+            if (reg.exec(phone) != null) {
+                flag++;
+                hint5.innerText = "手机格式正确";
+                green(text5, hint5);
+
+            } else {
+                hint5.innerText = "手机格式错误";
+                red(text5, hint5);
+            }
+        } else {
+            hint5.innerText = "手机不能为空";
+            red(text5, hint5);
         }
         return flag;
     }
     btn.onclick = function() {
-         flag=0;
+        flag = 0;
         btn.style.background = "#1C86EE";
         setTimeout("btn.style.background='#5CACEE'", 100);
-        flag=check(text1, hint1,flag);console.log("flag",flag);
-        flag=check(text2, hint2,flag);console.log("flag",flag);
-       flag= check(text3, hint3,flag);console.log("flag",flag);
-        if(flag==3){
+        flag = checkName(text1, hint1, flag);
+        console.log("flag", flag);
+        flag = checkName(text2, hint2, flag);
+        console.log("flag", flag);
+        flag = checkRePass(flag);
+        console.log("flag", flag);
+        flag = checkEmail(flag);
+        console.log("flag", flag);
+        flag = checkPhone(flag);
+        console.log("flag", flag);
+        if (flag == 5) {
             alert("提交成功！");
-        }else
-        alert("提交失败!");
+        } else
+            alert("提交失败!");
     }
     </script>
 </body>
