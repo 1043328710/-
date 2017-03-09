@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<style>
+.container {
+    margin: 0 auto;
+    display: flex;
+    width: 500px;
+    height: 600px;
+    //background: red;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box {
+    width: 450px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+input {
+    width: 270px;
+    height: 40px;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    margin: 0 20px;
+}
+
+.name {
+    font-size: 18px;
+    font-family: "MicrosoftYaHei";
+}
+
+.button {
+    width: 70px;
+    height: 40px;
+    background-color: #5CACEE;
+    color: #fff;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.hint {
+    display: inline-block;
+    height: 22px;
+    margin-left: -100px;
+    margin-top: -10px;
+    color: #999;
+}
+</style>
+
+<body>
+    <div class="container">
+        <div class="box"> 
+            <span class="name">名 称</span>
+            <input type="text" id="text1" onfocus="foc(hint1)"  onblur="onb(text1,hint1)"/>
+        </div>
+        <span class="hint" id="hint1"></span>
+        <div class="box">
+            <span class="name">名 称</span>
+            <input type="text" id="text2" onfocus="foc(hint2)"  onblur="onb(text2,hint2)"/>
+        </div>
+        <span class="hint" id="hint2"></span>
+        <div class="box">
+            <span class="name">名 称</span>
+            <input type="text" id="text3" onfocus="foc(hint3)"  onblur="onb(text3,hint3)"/>
+        </div>
+        <span class="hint" id="hint3"></span>
+          <div class="button" id="btn">提 交</div>
+    </div>
+    <script>
+    var text1 = document.getElementById("text1");
+    var text2 = document.getElementById("text2");
+    var text3 = document.getElementById("text3");
+    var btn = document.getElementById("btn");
+    var hint1 = document.getElementById("hint1");
+    var hint2 = document.getElementById("hint2");
+    var hint3 = document.getElementById("hint3");
+    var flag;
+    function foc(hint){
+        hint.innerText="必填：长度为4~16个字符";
+    }
+  function onb(text,hint){
+    check(text,hint);
+  }
+
+
+    function check(text, hint,flag) {
+    	var reg=new RegExp(/[^\x00-\xff]/);
+    	var length=0;
+    	for(var i=0;i<text.value.length;i++){
+    		console.log(i,text.value[i],reg.exec(text.value[i]),reg.exec(text.value[i])!=null);
+    		if(reg.exec(text.value[i])!=null){
+    			length+=2;
+    		}else length++;
+    }
+    	console.log(length);
+        if (length <= 16 && length >= 4) {
+            flag++;
+            hint.innerText = "名称格式正确";
+            hint.style.color = "#00FF7F";
+            text.style.borderColor = "#00FF7F";
+        } else {   
+            if (length == 0) {
+                hint.innerText = "姓名不能为空";
+            } else hint.innerText = "名称格式不正确";
+
+            hint.style.color = "#FF0000";
+            text.style.borderColor = "#FF0000";
+        }
+        return flag;
+    }
+    btn.onclick = function() {
+         flag=0;
+        btn.style.background = "#1C86EE";
+        setTimeout("btn.style.background='#5CACEE'", 100);
+        flag=check(text1, hint1,flag);console.log("flag",flag);
+        flag=check(text2, hint2,flag);console.log("flag",flag);
+       flag= check(text3, hint3,flag);console.log("flag",flag);
+        if(flag==3){
+            alert("提交成功！");
+        }else
+        alert("提交失败!");
+    }
+    </script>
+</body>
+
+</html>
